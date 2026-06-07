@@ -23,7 +23,7 @@ Dashboard desenvolvido em Power BI para análise de performance comercial, logí
 
 ### Visão Executiva — Performance Logística
 
-![Performance Logística](c32189a1-ed7f-4cfe-b2b6-c4237579051c.png)
+![Performance Logística](assets/logistica.png)
 
 **Principais análises:**
 - Custo total de frete
