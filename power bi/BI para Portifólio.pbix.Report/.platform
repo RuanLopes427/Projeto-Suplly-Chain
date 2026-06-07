@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "BI para Portifólio.pbix"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "39bc154f-8034-472b-a13a-0545f2d05ff5"
+  }
+}

@@ -1,0 +1,184 @@
+table dCalendario
+	lineageTag: 3c492e57-cb5d-491a-992f-cce8d8ed302d
+
+	column Data
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2049c40f-95f9-4a97-a6eb-9c98ebad1434
+		summarizeBy: none
+		sourceColumn: Data
+
+		variation Variation
+			isDefault
+			relationship: 24a4be13-e256-4ec2-9693-9716891e8984
+			defaultHierarchy: LocalDateTable_0e6c0a5f-d06a-42ad-8efb-21a19e830ce8.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 892b87c3-21f2-4566-93e5-7d647cdb8e3e
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: c997083f-1fb0-49f0-b8ef-b8a6f922e43c
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Trimestre
+		dataType: string
+		lineageTag: d9f00469-3a21-41f7-a250-2cf41129ef34
+		summarizeBy: none
+		sourceColumn: Nome_Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ec8123b-2888-47db-9763-85a9ce74fbde
+		summarizeBy: sum
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Mes
+		dataType: string
+		lineageTag: ad201ddc-ad3d-4ae1-8edc-4acb7623b1b7
+		summarizeBy: none
+		sourceColumn: Nome_Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semana_Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: a826cf68-3c6c-48c8-a4d4-c0435c32b5ee
+		summarizeBy: sum
+		sourceColumn: Semana_Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 62208aa7-caab-41a9-af85-3731958cfa27
+		summarizeBy: sum
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia_Semana_Num
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a19ac1a-5a4e-418c-92bf-fdbd3c7c2488
+		summarizeBy: sum
+		sourceColumn: Dia_Semana_Num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Dia_Semana
+		dataType: string
+		lineageTag: 1a7961c9-f1c1-48a4-9dfb-92e4b14ba38a
+		summarizeBy: none
+		sourceColumn: Nome_Dia_Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Eh_Fim_Semana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c7672fb6-2939-4df9-a79f-085e8fcceea2
+		summarizeBy: none
+		sourceColumn: Eh_Fim_Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Eh_Feriado_BR
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e7b50752-591b-4ca9-8c0c-8aeee6c5fd72
+		summarizeBy: none
+		sourceColumn: Eh_Feriado_BR
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes/Ano
+		dataType: dateTime
+		formatString: mmm/yyyy
+		lineageTag: cb9cd99b-1540-421e-b022-4afc32c5759e
+		summarizeBy: none
+		sourceColumn: Mes/Ano
+
+		variation Variation
+			isDefault
+			relationship: 49ae9435-5b86-48e4-a6e0-a1bda812cace
+			defaultHierarchy: LocalDateTable_70fb7eb5-3fe1-44e7-868c-4eaa6e73cec6.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Semestre
+		dataType: string
+		lineageTag: 0b2da421-d592-4fb8-8fb5-76e580d5af1b
+		summarizeBy: none
+		sourceColumn: Semestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Eh_Dia_Util
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 792c0d8a-19e0-43ff-83bb-e091aa3ea8f9
+		summarizeBy: none
+		sourceColumn: Eh_Dia_Util
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'É Vigente?' = IF(dCalendario[Data]<MAX(fVendas_Logistica[Data_Venda]),"Sim","Não")
+		lineageTag: 23aee894-f922-41d3-bc75-473999c9d68f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trim/ano = STARTOFQUARTER(dCalendario[Data])
+		formatString: mm/yyyy
+		lineageTag: e7892a76-b32f-46bd-beb2-77ee1b32ebcf
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 92ca3b51-53b8-4c4e-a925-0382942d24fd
+			defaultHierarchy: LocalDateTable_c2fa779c-95a5-40d9-b0e8-81c975e4d016.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition dCalendario = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Base de dados Power bi\DW_Logistica_SupplyChain_Pareto.xlsx"), null, true),
+				    dCalendario_Sheet = Fonte{[Item="dCalendario",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(dCalendario_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Data", type datetime}, {"Ano", Int64.Type}, {"Trimestre", Int64.Type}, {"Nome_Trimestre", type text}, {"Mes", Int64.Type}, {"Nome_Mes", type text}, {"Semana_Ano", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Num", Int64.Type}, {"Nome_Dia_Semana", type text}, {"Eh_Fim_Semana", type logical}, {"Eh_Feriado_BR", type logical}, {"Ano_Mes", type date}, {"Semestre", type text}, {"Eh_Dia_Util", type logical}}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Tipo Alterado",{{"Ano_Mes", "Mes/Ano"}})
+				in
+				    #"Colunas Renomeadas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,537 @@
+table Medidas
+	lineageTag: 23ef136a-6201-427b-98f4-cb801a1550c5
+
+	measure 'Faturamento Total' = SUM(fVendas_Logistica[Valor_Venda])
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: f8001e95-d657-4d7a-a532-7f8d3393b529
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Custo Total' = SUM(fVendas_Logistica[Custo_Produto]) + [Custo frete]
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 6b18292b-f4b2-4cf6-a212-7123805ceebd
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Total Pago Frete' = SUM(fVendas_Logistica[Valor_Frete])
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: da8e7a33-6668-41e9-b25c-4d76e9141fba
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Lucro Total' = [Faturamento Total]-[Custo Total]
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: cef658e4-cb92-43b6-b3cf-d777a724c18c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure '% Margem de Lucro' = [Lucro Total]/[Faturamento Total]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e919f56c-3286-4553-b3f4-0254cf1252d1
+
+	measure 'Total Vendas' = COUNTROWS(fVendas_Logistica)
+		formatString: 0
+		lineageTag: 566b917c-0ed1-4b61-976d-edf0bf7a30f0
+
+	measure 'Média faturamento' = AVERAGE(fVendas_Logistica[Valor_Venda])
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: ef023557-d09a-4c5e-96d7-0cbcd1a7b6b1
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure '% Faturamento YoY' =
+			
+			VAR Faturamento_Atual = [Faturamento Total]
+			VAR Faturamento_YoY = CALCULATE([Faturamento Total],
+			DATEADD(dCalendario[Data],-1,YEAR))
+			RETURN
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			    DIVIDE(Faturamento_Atual-Faturamento_YoY,Faturamento_YoY,"N/A"),"N/A")
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 61c90edf-1073-43d7-baba-70d2c3bb9372
+
+	measure 'Indicador Fat Atual VS anterior' =
+			
+			VAR seta = IF([% Faturamento YoY]>0,"▲ ", "▼ ")
+			VAR Variacao = [% Faturamento YoY]
+			RETURN
+			seta &FORMAT(Variacao,"0.00%")
+		lineageTag: 78762612-3cb2-42cf-a9b5-8ff60c6c77dd
+
+	measure '% Lucro YoY' =
+			
+			VAR Lucro_Atual = [Lucro Total]
+			VAR Lucro_YoY =CALCULATE([Lucro Total],
+			DATEADD(dCalendario[Data],-1,YEAR))
+			RETURN
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			        DIVIDE(Lucro_Atual-Lucro_YoY,Lucro_YoY,"N/A"),"N/A")
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c6c95ebb-b635-4f7f-8115-51f5d19b25d8
+
+	measure 'Indicador Lucro Atual vs Anterior' =
+			
+			VAR seta = IF([% Lucro YoY]>0,"▲ ","▼ ")
+			Var Variacao = [% Lucro YoY]
+			RETURN
+			seta & FORMAT(Variacao,"0.00%")
+		lineageTag: ebdf950e-c820-42ae-9197-32d4789b188f
+
+	measure '% Total de Vendas YoY' = ```
+			
+			VAR Vendas_AnoAnterior = CALCULATE([Total Vendas],
+			DATEADD(dCalendario[Data],-1,YEAR))
+			VAR TotalVendasAtual = [Total Vendas]
+			RETURN
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			        DIVIDE(TotalVendasAtual-Vendas_AnoAnterior,Vendas_AnoAnterior,"N/A"),"N/A")
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 75c93671-affa-412d-9874-a33fb13b98ac
+
+	measure 'Indicador Vendas Atual VS Anterior' =
+			
+			VAR variacao = [% Total de Vendas YoY]
+			VAR seta = IF(variacao>0,"▲ ","▼ ")
+			RETURN
+			seta & FORMAT(variacao,"0.00%")
+		lineageTag: a4977e2d-8077-45e3-88fb-26c7cd21525f
+
+	measure '% Entregas no Prazo' =
+			
+			VAR Quantiida_Entregues = COUNTX(FILTER(fVendas_Logistica,
+			fVendas_Logistica[Status_Entrega] ="Entregue"),
+			"")
+			VAR Total_Vendas = [Total Vendas]
+			RETURN
+			Quantiida_Entregues/Total_Vendas
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 137d1d83-df21-41a1-acf1-5b1a1a17ea14
+
+	measure 'Custo frete' = SUM(fVendas_Logistica[Valor_Frete])
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: dd15d5a5-4c34-4db7-943d-bd08f78f4835
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Média Custo de frete por pedido' =
+			
+			DIVIDE(
+			    SUM( fVendas_Logistica[Valor_Frete] ),
+			    [Total Vendas],
+			    0
+			)
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 95f3ad69-c8a3-4c02-a9b1-4cffac60a67b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Tempo de entrega (Dias)' = AVERAGEX(fVendas_Logistica,fVendas_Logistica[Data_Entrega]-fVendas_Logistica[Data_Venda])
+		lineageTag: 230f26f4-3ea8-4fd3-9056-a3a398a45b5e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Frete CIF' = [Custo frete]/[Faturamento Total]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a61206d4-8c39-4cbf-99ba-85c0f5c1667a
+
+	measure 'Melhor Transportadora' =
+			CALCULATE(
+			    MAX(dTransportadoras[Nome_Transportadora]),
+			TOPN(1,ALL(dTransportadoras[Nome_Transportadora]),[% Frete CIF],ASC))
+		lineageTag: 02d58a7c-40a1-492a-b300-047cdd1e98e3
+
+	measure '% Frete Melhor Transp' = ```
+			
+			VAR Melhor_Transp = [Melhor Transportadora]
+			RETURN
+			CALCULATE([% Frete CIF],
+			dTransportadoras[Nome_Transportadora]=Melhor_Transp)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 28d8cf30-1d85-4c34-9a62-4fbbd38b9dc7
+
+	measure 'Média frete melhor Transp' = ```
+			
+			 VAR Melhor_Transp = [Melhor Transportadora]
+			 RETURN
+			 CALCULATE(Medidas[Média Custo de frete por pedido],
+			 dTransportadoras[Nome_Transportadora]=Melhor_Transp)
+			
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 3fa1879a-1b95-489f-8b48-6dc01804f3c2
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Pior Transportadora' =
+			CALCULATE(
+			    MAX(dTransportadoras[Nome_Transportadora]),
+			TOPN(1,ALL(dTransportadoras[Nome_Transportadora]),[% Frete CIF]))
+		lineageTag: 21677f0a-9a5c-4160-97b5-17de46e4ff8a
+
+	measure '% Frete CIF pior Transp' =
+			
+			VAR Pior_Transp = [Pior Transportadora]
+			RETURN
+			CALCULATE([% Frete CIF],
+			dTransportadoras[Nome_Transportadora] = Pior_Transp)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 691a27c1-dcc3-4668-99dc-3d7a0b67f885
+
+	measure 'Média Frete Pior Transp' =
+			
+			VAR Pior_Transp = [Pior Transportadora]
+			RETURN
+			CALCULATE(Medidas[Média Custo de frete por pedido],
+			dTransportadoras[Nome_Transportadora] =  Pior_Transp)
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 3784343a-530c-4b00-9cb2-44bd49cf157a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Faturamento YoY' =
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			    CALCULATE([Faturamento Total],
+			DATEADD(dCalendario[Data],-1,YEAR)), "")
+		lineageTag: 62d9d646-c39b-494b-9320-33c3e93bcd78
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Pedidos Entregues YoY' = ```
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			 CALCULATE([% Entregas no Prazo],
+			DATEADD(dCalendario[Data],-1,YEAR)),"N/A")
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 80301e81-bb5d-44d7-a1f1-299a132f57a6
+
+	measure '% Total Frete YoY' =
+			
+			VAR Custo_Atual = [Custo frete]
+			VAR Custo_Anterior = CALCULATE([Custo frete],
+			DATEADD(dCalendario[Data],-1,YEAR))
+			RETURN
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			    DIVIDE(Custo_Atual-Custo_Anterior,Custo_Anterior,"N/A"),"N/A")
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c2d37be2-37a2-4fbd-853f-528064177cae
+
+	measure 'Indicador % Frete Total YoY' =
+			
+			VAR Custo = [% Total Frete YoY]
+			VAR Seta = IF(Custo>0,"▲ ","▼ ")
+			RETURN
+			Seta & FORMAT(Custo,"0.00%")
+		lineageTag: 0db92440-7fad-4271-bd32-ff0403e4f2be
+
+	measure '% Tempo Médio YoY' = ```
+			
+			 VAR TempoAtual = [Média Tempo de Entrega(Horas)]
+			 VAR TempoAnterior = CALCULATE([Média Tempo de Entrega(Horas)],
+			 DATEADD(dCalendario[Data],-1,YEAR))
+			 RETURN
+			 IF(HASONEVALUE(
+			    dCalendario[Ano]),
+			    DIVIDE(TempoAtual-TempoAnterior,TempoAnterior,"N/A"),"N/A")
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: cea42c07-67a7-4245-92c1-a82393c8d66c
+
+	measure 'Média Tempo de Entrega(Horas)' = AVERAGE(fVendas_Logistica[Tempo de Entrega])
+		lineageTag: d657ba66-6904-422f-8bc0-317e6b858e4e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Média Tempo de Entrega Hrs Formatado' = FORMAT([Média Tempo de Entrega(Horas)],"000.0 Horas")
+		lineageTag: dd0c009f-6ddf-44ca-bddd-8f7a3bd8c160
+
+	measure 'Indicador % Tempo médio de Entrega' =
+			
+			VAR Tempo =     [% Tempo Médio YoY]
+			VAR seta  = IF(Tempo>0,"▲ ", "▼ ")
+			RETURN
+			seta & FORMAT(Tempo,"0.00%")
+		lineageTag: cc57f634-82a5-4970-8e1e-d5f83d2fb4fa
+
+	measure '% Média Vlr frete YoY' = ```
+			
+			VAR Media_atual = Medidas[Média Custo de frete por pedido]
+			VAR Media_Anterior = CALCULATE(Medidas[Média Custo de frete por pedido],
+			DATEADD(dCalendario[Data],-1,YEAR))
+			RETURN
+			IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			        DIVIDE(Media_atual-Media_Anterior,Media_Anterior,"N/A"),
+			        "N/A")
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 6fc8d3fc-d2f5-4696-8723-b24fb25e8de8
+
+	measure 'Indicador % Média Vlr frete YoY' =
+			
+			VAR MediaValor = Medidas[% Média Vlr frete YoY]
+			VAR Seta = IF(Medidas[% Média Vlr frete YoY]>0,"▲ ","▼ ")
+			RETURN
+			Seta & FORMAT(MediaValor,"0.00%")
+		lineageTag: 0409979d-4d24-4093-aea7-a7f967309f2d
+
+	measure 'Lucro Total - Frete' = [Faturamento Total]-([Custo Total]+[Custo frete])
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: da931b88-7394-4cd3-b003-6fe68029747b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure '% Margem de Lucro Com frete' = [Lucro Total - Frete]/[Faturamento Total]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: fa4e3e68-22d9-4f3a-b1c7-88d64ee635dd
+
+	measure '% Acumulado Clientes' =
+			
+			VAR FatClienteAtual =
+			    CALCULATE( SUM( fVendas_Logistica[Valor_Venda] ) )
+			
+			VAR FatTotal =
+			    CALCULATE(
+			        SUM( fVendas_Logistica[Valor_Venda] ),
+			        ALL( dClientes )
+			    )
+			
+			VAR FatAcumulado =
+			    CALCULATE(
+			        SUM( fVendas_Logistica[Valor_Venda] ),
+			        FILTER(
+			            ALL( dClientes ),
+			            CALCULATE( SUM( fVendas_Logistica[Valor_Venda] ) )
+			                >= FatClienteAtual
+			        )
+			    )
+			
+			RETURN
+			    DIVIDE( FatAcumulado, FatTotal, 0 )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c1635646-9f99-4c7e-a876-a743797ca429
+
+	measure 'Clientes Classe A' =
+			COUNTROWS(FILTER(VALUES(dClientes),
+			dClientes[Status de Cliente]="A - Alto Valor"))
+		formatString: 0
+		lineageTag: 6ab57bd7-36d8-4577-bea3-72ae8bb804d4
+
+	measure 'Clientes Classe B' =
+			COUNTROWS(FILTER(VALUES(dClientes),
+			dClientes[Status de Cliente]="B - Médio Valor"))
+		formatString: 0
+		lineageTag: a36c64b7-58bd-480f-90c6-a408bcd25a36
+
+	measure 'Clientes ABC' =
+			SWITCH(TRUE(),
+			[% Acumulado Clientes]<=0.80,
+			"A - Alto Valor",
+			[% Acumulado Clientes]<=0.95,
+			"B - Médio Valor",
+			"C - Baixo Valor")
+		lineageTag: 26dd7c22-28a3-4a0a-a846-6d64b6aadc72
+
+	measure 'Fat Clientes Classe A' =
+			CALCULATE([Faturamento Total],
+			FILTER(VALUES(dClientes[Status de Cliente]),
+			dClientes[Status de Cliente]="A - Alto Valor"))
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: b30669e1-035d-427a-8a38-b1cfb45a6e0e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Clientes Classe C' =
+			COUNTROWS(
+			    FILTER(
+			        VALUES(dClientes),
+			        dClientes[Status de Cliente] = "C - Baixo Valor"))
+		formatString: 0
+		lineageTag: 3ba3bbaa-0049-436c-8d8d-7b323a09ac2e
+
+	measure 'Lucro Clintes A' = ```
+			CALCULATE([Lucro Total - Frete], 
+			dClientes[Status de Cliente] = "A - Alto Valor")
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 84594fc0-85ca-438a-a211-cf3ff04c1aa5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Total clientes' = DISTINCTCOUNT(fVendas_Logistica[ID_Cliente])
+		formatString: 0
+		lineageTag: d5c56928-a67b-40d0-b8e1-c44751e181be
+
+	measure 'Lucro Clientes B' =
+			CALCULATE([Lucro Total - Frete],
+			dClientes[Status de Cliente] = "B - Médio Valor")
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 17764dac-bd9f-4b28-8be6-5e2f82661b51
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'lucro Clintes C' =
+			CALCULATE([Lucro Total - Frete],
+			dClientes[Status de Cliente] = "C - Baixo Valor")
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: e3c2cc3e-a7e5-4853-878e-44d03e75e483
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Clientes ABC Por Cor' =
+			
+			IF(
+			    HASONEVALUE(dClientes[ID_Cliente]),
+			         SWITCH(TRUE(),
+			[% Acumulado Clientes]<=0.80,
+			"🟢",
+			[% Acumulado Clientes]<=0.95,
+			"🟡",
+			"⚪"),
+			BLANK())
+		lineageTag: bed264b6-b4ef-4e53-b4e6-de13ebd287de
+
+	measure '% Pedidos em Trânsito' = ```
+			
+			VAR Pedidos_Transito = COUNTROWS(
+			    FILTER(fVendas_Logistica, 
+			    fVendas_Logistica[Status_Entrega]= "Em Trânsito"))
+			    var total_pedidos = COUNTROWS(fVendas_Logistica)
+			
+			    RETURN
+			    DIVIDE(Pedidos_Transito,total_pedidos,0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: cae424cb-aa1c-47ec-9848-d4ac79923526
+
+	measure '% Pedidos Atrasados' = ```
+			
+			 VAR Pedidos_Transito = COUNTROWS(
+			    FILTER(fVendas_Logistica, 
+			    fVendas_Logistica[Status_Entrega]= "Atrasado"))
+			    var total_pedidos = COUNTROWS(fVendas_Logistica)
+			
+			    RETURN
+			    DIVIDE(Pedidos_Transito,total_pedidos,0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 26e1886f-0872-415f-909d-c94c41481714
+
+	measure 'Indicador % Custo de frete YoY' =
+			
+			VAR Custo_YoY = CALCULATE([Custo frete],
+			DATEADD(dCalendario[Data],-1,YEAR)
+			)
+			VAR Percentual_YoY = IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			    DIVIDE([Custo frete]-Custo_YoY,Custo_YoY,"N/A"),"N/A"
+			    )
+			VAR SETA = IF(Percentual_YoY>0, "▲ ",
+			"▼ ")
+			
+			RETURN
+			SETA & FORMAT(Percentual_YoY,"0.00%")
+		lineageTag: f93b5e01-5bd3-4536-bd44-2d2855076afb
+
+	measure '% Custo de frete YoY' = ```
+			
+			 VAR Custo_YoY = CALCULATE([Custo frete],
+			DATEADD(dCalendario[Data],-1,YEAR)
+			)
+			RETURN
+			 IF(
+			    HASONEVALUE(dCalendario[Ano]),
+			    DIVIDE([Custo frete]-Custo_YoY,Custo_YoY,"N/A"),"N/A"
+			    )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7198a5d0-efae-420c-86d6-35f0e0ff9efa
+
+	measure 'Isight automático Clientes' =
+			
+			"💡 Os " & [Clientes Classe A] &
+			" clientes Classe A representam apenas " &
+			FORMAT(
+			    DIVIDE(
+			        [Clientes Classe A],
+			        DISTINCTCOUNT( fVendas_Logistica[ID_Cliente] )
+			    ),
+			    "0%"
+			) &
+			" da base de clientes e concentram 80% da receita — risco de concentração."
+		lineageTag: 678e9ff5-601f-4e3f-8373-4760212b9a85
+
+	measure 'Transportadora selecionada' = "🚚 " & SELECTEDVALUE(dTransportadoras[Nome_Transportadora])
+		lineageTag: 650d4c8e-60fc-4d61-8e72-7fbef4189e4c
+
+	measure 'Tipo de Veiculo Selecionado' = SELECTEDVALUE(dTransportadoras[Tipo_Veiculo])
+		lineageTag: 662f0142-7060-42dc-bebc-af4d65079ecc
+
+	measure 'Região mais cara' =
+			CALCULATE(MAX(dClientes[Regiao]),
+			TOPN(1,ALL(dClientes[Regiao]),Medidas[Média Custo de frete por pedido]))
+		lineageTag: 6ff414a4-aaa5-4753-88d4-c4d88a7d1c24
+
+	measure 'Regiao mais barata' =
+			CALCULATE(MAX(dClientes[Regiao]),
+			TOPN(1,ALL(dClientes[Regiao]),[Média Custo de frete por pedido],ASC))
+		lineageTag: 5432e593-0c69-4d81-99eb-cc162b0c1f4a
+
+	measure 'Média de frete por pedido geral' =
+			
+			CALCULATE([Média Custo de frete por pedido],
+			ALL(dTransportadoras))
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 67fbc01c-3711-45d4-990a-5326a277099e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure '% Acima ou abaixo da média' =
+			
+			VAR FreteGeral = [Média de frete por pedido geral]
+			
+			VAR FreteSelecionado = [Média Custo de frete por pedido]
+			
+			RETURN
+			DIVIDE(FreteSelecionado-FreteGeral,FreteGeral)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 50aed4d5-82cc-40ba-b697-764c4b368ec1
+
+	measure 'Texto variaçao media de frete' =
+			
+			VAR Variacao =  [% Acima ou abaixo da média]
+			VAR Seta = IF(Variacao>0,"Acima ▲","Abaixo ▼")
+			
+			RETURN
+			FORMAT(Variacao,"0.00%") & " " & Seta
+		lineageTag: de09153e-784b-4f25-a649-832f6658403a
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 6d83be92-3167-406d-8893-313087395bce
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 8f9d4f1cce194a818e806ad18dd2c47c
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

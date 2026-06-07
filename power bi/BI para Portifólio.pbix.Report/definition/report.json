@@ -1,0 +1,181 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU02",
+      "reportVersionAtImport": {
+        "visual": "2.6.0",
+        "report": "3.1.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Custom6757359908568259.json",
+      "reportVersionAtImport": {
+        "visual": "2.7.0",
+        "report": "3.2.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "5c2c4cc7d0a4a105a7b9",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dCalendario"
+              }
+            },
+            "Property": "É Vigente?"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dCalendario",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "É Vigente?"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Sim'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "enlightenDataStoryDDFB78A6143E42CFAFBC50CCF18D978D",
+    "textFilter25A4896A83E0487089E2B90C9AE57C8A",
+    "paretoEDD8E69761BA4B7BB3AA6D813990D7BF",
+    "paretoplus2EFEC13210A14D3E82580687601DE984"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU02",
+          "path": "BaseThemes/CY26SU02.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Custom6757359908568259.json",
+          "path": "Custom6757359908568259.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "exit-button6855290085039909.png",
+          "path": "exit-button6855290085039909.png",
+          "type": "Image"
+        },
+        {
+          "name": "Imagem112398998508574854.png",
+          "path": "Imagem112398998508574854.png",
+          "type": "Image"
+        },
+        {
+          "name": "Imagem327800773268556667.png",
+          "path": "Imagem327800773268556667.png",
+          "type": "Image"
+        },
+        {
+          "name": "Imagem34094478108284981.png",
+          "path": "Imagem34094478108284981.png",
+          "type": "Image"
+        },
+        {
+          "name": "Imagem36420991168946165.png",
+          "path": "Imagem36420991168946165.png",
+          "type": "Image"
+        },
+        {
+          "name": "Imagem37506804489544046.png",
+          "path": "Imagem37506804489544046.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultFilterActionIsDataFilter": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "filterPaneHiddenInEditMode": true,
+    "useDefaultAggregateDisplayName": true,
+    "customMemoryLimit": "1048576",
+    "customTimeoutLimit": "225"
+  }
+}

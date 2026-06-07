@@ -1,0 +1,60 @@
+table dProdutos
+	lineageTag: 011a7cd1-d3b2-4348-874b-179fa61161b0
+
+	column ID_Produto
+		dataType: string
+		lineageTag: 757e142d-e8bc-40e2-885d-0901d940eb77
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Produto
+		dataType: string
+		lineageTag: ab928ce5-908e-4a93-a179-0760add899de
+		summarizeBy: none
+		sourceColumn: Nome_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: e849d818-1ac2-48b5-9c2d-37543929a1f6
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcategoria
+		dataType: string
+		lineageTag: 2a784ff6-eeaa-4e8a-b326-dd990bbc678a
+		summarizeBy: none
+		sourceColumn: Subcategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Peso_Kg
+		dataType: double
+		lineageTag: 82f8c4aa-490a-4b06-a345-56b7c91942ce
+		summarizeBy: none
+		sourceColumn: Peso_Kg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dProdutos = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Base de dados Power bi\DW_Logistica_SupplyChain_Pareto.xlsx"), null, true),
+				    dProdutos_Sheet = Fonte{[Item="dProdutos",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(dProdutos_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Produto", type text}, {"Nome_Produto", type text}, {"Categoria", type text}, {"Subcategoria", type text}, {"Peso_Kg", type number}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

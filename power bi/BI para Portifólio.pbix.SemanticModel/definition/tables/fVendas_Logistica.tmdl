@@ -1,0 +1,137 @@
+table fVendas_Logistica
+	lineageTag: ceae2324-4980-4243-b85c-e1c653e487e0
+
+	column ID_Pedido
+		dataType: string
+		lineageTag: d5a153c9-e9c4-492b-841a-bd6cb9f6a146
+		summarizeBy: none
+		sourceColumn: ID_Pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Venda
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: cefffe6e-7213-475c-8cf0-e5c592b7a519
+		summarizeBy: none
+		sourceColumn: Data_Venda
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Data_Entrega
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 180f417e-d6b9-4fde-bc15-7e21a94fd922
+		summarizeBy: none
+		sourceColumn: Data_Entrega
+
+		variation Variation
+			isDefault
+			relationship: 52998ddb-7cbb-4fc7-ae2b-412fd154904e
+			defaultHierarchy: LocalDateTable_4d4b6a7b-77fe-4859-a0f7-bfe847139f22.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ID_Cliente
+		dataType: string
+		lineageTag: ff2e649a-f505-4a4c-9038-4a747cb01fd3
+		summarizeBy: none
+		sourceColumn: ID_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Produto
+		dataType: string
+		lineageTag: 9ce895a9-11e8-45db-9b70-a4c20489ec92
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Transportadora
+		dataType: string
+		lineageTag: 5c15fa18-0387-460d-a255-dc330063aa06
+		summarizeBy: none
+		sourceColumn: ID_Transportadora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade_Vendida
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b5b7dfa-f5ad-4382-87b4-c707b1c2cb89
+		summarizeBy: sum
+		sourceColumn: Quantidade_Vendida
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor_Venda
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 3057f88f-ae2e-483b-afda-61fdb58038f7
+		summarizeBy: sum
+		sourceColumn: Valor_Venda
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Custo_Produto
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 907fae16-cf96-4da6-9ce4-b03b226a94dd
+		summarizeBy: sum
+		sourceColumn: Custo_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Valor_Frete
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 673333ad-a726-43ca-83c0-9164f6f1258b
+		summarizeBy: sum
+		sourceColumn: Valor_Frete
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Status_Entrega
+		dataType: string
+		lineageTag: 53c8623e-7f33-425a-be18-45c5c034a943
+		summarizeBy: none
+		sourceColumn: Status_Entrega
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo de Entrega' = DATEDIFF(fVendas_Logistica[Data_Venda],fVendas_Logistica[Data_Entrega],HOUR)
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b63f64e-d597-4ace-b905-81f36e0fdd8e
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fVendas_Logistica = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Base de dados Power bi\DW_Logistica_SupplyChain_Pareto.xlsx"), null, true),
+				    fVendas_Logistica_Sheet = Fonte{[Item="fVendas_Logistica",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(fVendas_Logistica_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Pedido", type text}, {"Data_Venda", type date}, {"Data_Entrega", type date}, {"ID_Cliente", type text}, {"ID_Produto", type text}, {"ID_Transportadora", type text}, {"Quantidade_Vendida", Int64.Type}, {"Valor_Venda", Currency.Type}, {"Custo_Produto", Currency.Type}, {"Valor_Frete", Currency.Type}, {"Status_Entrega", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

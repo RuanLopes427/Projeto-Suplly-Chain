@@ -1,0 +1,52 @@
+table dTransportadoras
+	lineageTag: 7deca9d7-d7a2-463d-8192-44392003075e
+
+	column ID_Transportadora
+		dataType: string
+		lineageTag: 27b57dcd-378e-4981-a62a-ad8d0ce13959
+		summarizeBy: none
+		sourceColumn: ID_Transportadora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Transportadora
+		dataType: string
+		lineageTag: 194bb25f-c3e7-44be-8f01-ffa93daddf38
+		summarizeBy: none
+		sourceColumn: Nome_Transportadora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo_Veiculo
+		dataType: string
+		lineageTag: 020fd1d0-950f-4ee0-b7b3-3330bac2bae6
+		summarizeBy: none
+		sourceColumn: Tipo_Veiculo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Avaliacao_Transportadora
+		dataType: double
+		lineageTag: cf879d61-2cdc-4b05-a0ef-2fcfdc7d3b95
+		summarizeBy: none
+		sourceColumn: Avaliacao_Transportadora
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dTransportadoras = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Base de dados Power bi\DW_Logistica_SupplyChain_Pareto.xlsx"), null, true),
+				    dTransportadoras_Sheet = Fonte{[Item="dTransportadoras",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(dTransportadoras_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Transportadora", type text}, {"Nome_Transportadora", type text}, {"Tipo_Veiculo", type text}, {"Avaliacao_Transportadora", type number}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

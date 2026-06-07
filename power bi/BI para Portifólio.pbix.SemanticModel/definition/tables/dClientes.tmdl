@@ -1,0 +1,88 @@
+table dClientes
+	lineageTag: 9b16788a-23ba-46fb-935e-cdcac6ed4167
+
+	column ID_Cliente
+		dataType: string
+		lineageTag: 1da5c809-5b5f-47d5-bbac-6775b94479db
+		summarizeBy: none
+		sourceColumn: ID_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Empresa
+		dataType: string
+		lineageTag: a2e32ae9-f11e-47f4-8d6f-df5dd6648daf
+		summarizeBy: none
+		sourceColumn: Nome_Empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: a0ee86d5-0883-4cc1-a815-53a65c326c29
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade
+		dataType: string
+		lineageTag: bc98ddf1-2cbb-4ae1-ae3e-bf7fee3e4c50
+		summarizeBy: none
+		sourceColumn: Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regiao
+		dataType: string
+		lineageTag: fb8e0bea-3905-4aec-8ac6-8269b66cfb84
+		summarizeBy: none
+		sourceColumn: Regiao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segmento
+		dataType: string
+		lineageTag: 0cd0bd48-16e5-416c-b06a-d320e7f3b3ba
+		summarizeBy: none
+		sourceColumn: Segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status de Cliente' = ```
+			SWITCH(TRUE(),
+			[% Acumulado Clientes]<=0.80,
+			"A - Alto Valor",
+			[% Acumulado Clientes]<=0.95,
+			"B - Médio Valor",
+			"C - Baixo Valor")
+			
+			```
+		lineageTag: c6fa5a5f-5a52-473c-be80-960998fd5814
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cod e nome' = dClientes[ID_Cliente] & "- "& dClientes[Nome_Empresa]
+		lineageTag: cb84aa89-3f86-4c07-b516-f33d77110236
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dClientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Base de dados Power bi\DW_Logistica_SupplyChain_Pareto.xlsx"), null, true),
+				    dClientes_Sheet = Fonte{[Item="dClientes",Kind="Sheet"]}[Data],
+				    #"Tipo Alterado" = Table.TransformColumnTypes(dClientes_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}}),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(#"Tipo Alterado", [PromoteAllScalars=true]),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Cliente", type text}, {"Nome_Empresa", type text}, {"Estado", type text}, {"Cidade", type text}, {"Regiao", type text}, {"Segmento", type text}}),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Tipo Alterado1","Nordeste","Nordeste - Brasil",Replacer.ReplaceText,{"Regiao"})
+				in
+				    #"Valor Substituído"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Exception
+

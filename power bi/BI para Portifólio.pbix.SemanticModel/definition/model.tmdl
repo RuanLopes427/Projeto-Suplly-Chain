@@ -1,0 +1,28 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["fVendas_Logistica","dTransportadoras","dProdutos","dClientes","dCalendario"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fVendas_Logistica
+ref table DateTableTemplate_4616b889-8280-41c8-a037-6d5b51e0e756
+ref table LocalDateTable_4d4b6a7b-77fe-4859-a0f7-bfe847139f22
+ref table dTransportadoras
+ref table dProdutos
+ref table dClientes
+ref table dCalendario
+ref table LocalDateTable_0e6c0a5f-d06a-42ad-8efb-21a19e830ce8
+ref table LocalDateTable_70fb7eb5-3fe1-44e7-868c-4eaa6e73cec6
+ref table Medidas
+ref table LocalDateTable_c2fa779c-95a5-40d9-b0e8-81c975e4d016
+
+ref cultureInfo pt-BR
+

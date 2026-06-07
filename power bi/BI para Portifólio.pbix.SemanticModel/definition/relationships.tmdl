@@ -1,0 +1,36 @@
+relationship 52998ddb-7cbb-4fc7-ae2b-412fd154904e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fVendas_Logistica.Data_Entrega
+	toColumn: LocalDateTable_4d4b6a7b-77fe-4859-a0f7-bfe847139f22.Date
+
+relationship 24a4be13-e256-4ec2-9693-9716891e8984
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dCalendario.Data
+	toColumn: LocalDateTable_0e6c0a5f-d06a-42ad-8efb-21a19e830ce8.Date
+
+relationship 49ae9435-5b86-48e4-a6e0-a1bda812cace
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dCalendario.Mes/Ano
+	toColumn: LocalDateTable_70fb7eb5-3fe1-44e7-868c-4eaa6e73cec6.Date
+
+relationship AutoDetected_f5099c11-52b8-4735-9c44-8eff6d0ca614
+	fromColumn: fVendas_Logistica.ID_Cliente
+	toColumn: dClientes.ID_Cliente
+
+relationship AutoDetected_bb9f1326-ddfa-45aa-a8f1-884c7639e239
+	fromColumn: fVendas_Logistica.ID_Produto
+	toColumn: dProdutos.ID_Produto
+
+relationship AutoDetected_5761ae69-6c20-4a87-b24e-1ddfda826b8c
+	fromColumn: fVendas_Logistica.ID_Transportadora
+	toColumn: dTransportadoras.ID_Transportadora
+
+relationship 21965046-09f7-fe7e-fc2d-434457032421
+	fromColumn: fVendas_Logistica.Data_Venda
+	toColumn: dCalendario.Data
+
+relationship 92ca3b51-53b8-4c4e-a925-0382942d24fd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dCalendario.Trim/ano
+	toColumn: LocalDateTable_c2fa779c-95a5-40d9-b0e8-81c975e4d016.Date
+

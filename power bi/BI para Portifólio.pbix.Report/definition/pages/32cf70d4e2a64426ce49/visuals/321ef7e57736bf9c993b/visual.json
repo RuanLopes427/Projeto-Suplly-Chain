@@ -1,0 +1,265 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "321ef7e57736bf9c993b",
+  "position": {
+    "x": 537.15156130997707,
+    "y": 428.9413556740289,
+    "z": 16000,
+    "height": 256.38994668697637,
+    "width": 729.20030464584909,
+    "tabOrder": 17000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dClientes"
+                    }
+                  },
+                  "Property": "Cod e nome"
+                }
+              },
+              "queryRef": "dClientes.Cod e nome",
+              "nativeQueryRef": "Cod e nome",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dClientes"
+                        }
+                      },
+                      "Property": "Segmento"
+                    }
+                  },
+                  "Function": 3
+                }
+              },
+              "queryRef": "Min(dClientes.Segmento)",
+              "nativeQueryRef": "Segmento",
+              "displayName": "Segmento"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Faturamento Total"
+                }
+              },
+              "queryRef": "Medidas.Faturamento Total",
+              "nativeQueryRef": "Faturamento",
+              "displayName": "Faturamento"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "% Acumulado Clientes"
+                }
+              },
+              "queryRef": "Medidas.% Acumulado Clientes",
+              "nativeQueryRef": "% Acumulado",
+              "displayName": "% Acumulado"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Clientes ABC"
+                }
+              },
+              "queryRef": "Medidas.Clientes ABC",
+              "nativeQueryRef": "Clientes ABC"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Clientes ABC Por Cor"
+                }
+              },
+              "queryRef": "Medidas.Clientes ABC Por Cor",
+              "nativeQueryRef": "Indicador de Classe",
+              "displayName": "Indicador de Classe"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas"
+                  }
+                },
+                "Property": "% Acumulado Clientes"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "89.22173109397728D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Min(dClientes.Segmento)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.76906752633792D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas.% Acumulado Clientes"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "113.71304134447486D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas.Clientes ABC"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "97.63288510221209D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas.Clientes ABC Por Cor"
+          }
+        }
+      ],
+      "subTotals": [
+        {
+          "properties": {
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "showExpandCollapseButtons": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

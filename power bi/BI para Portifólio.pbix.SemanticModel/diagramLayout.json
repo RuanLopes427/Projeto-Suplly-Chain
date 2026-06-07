@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 144,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 892.98216810123631,
+            "y": 0
+          },
+          "nodeIndex": "dCalendario",
+          "nodeLineageTag": "3c492e57-cb5d-491a-992f-cce8d8ed302d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 597.98216810123631,
+            "y": 1.376678277599467
+          },
+          "nodeIndex": "dClientes",
+          "nodeLineageTag": "9b16788a-23ba-46fb-935e-cdcac6ed4167",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 13,
+            "y": 0
+          },
+          "nodeIndex": "dProdutos",
+          "nodeLineageTag": "011a7cd1-d3b2-4348-874b-179fa61161b0",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 312.13171324526945,
+            "y": 12
+          },
+          "nodeIndex": "dTransportadoras",
+          "nodeLineageTag": "7deca9d7-d7a2-463d-8192-44392003075e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 92.6200594854916,
+            "y": 346.07840093509731
+          },
+          "nodeIndex": "fVendas_Logistica",
+          "nodeLineageTag": "ceae2324-4980-4243-b85c-e1c653e487e0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1226.9821681012363,
+            "y": 41.188339138799734
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "23ef136a-6201-427b-98f4-cb801a1550c5",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}
