@@ -38,7 +38,7 @@ Dashboard desenvolvido em Power BI para análise de performance comercial, logí
 
 ### Visão Geral de Clientes — Classificação ABC
 
-![Classificação ABC](5ae2b48e-2931-4de0-a74e-4f11f455e85d.png)
+![Classificação ABC](assets/clientes-abc.png)
 
 **Principais análises:**
 - Curva ABC de clientes
