@@ -7,7 +7,7 @@ Dashboard desenvolvido em Power BI para análise de performance comercial, logí
 
 ### Visão Executiva — Performance Comercial
 
-![Performance Comercial](b499873c-bc58-478c-b59b-05fedc4d0df1.png)
+![Performance Comercial](assets/comercial.png)
 
 **Principais análises:**
 - Faturamento Total
